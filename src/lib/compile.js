@@ -413,13 +413,8 @@ let render = (function() {
   }
   return render;
 })();
-<<<<<<< HEAD
-export let compiler = (function () {
-  exports.langID = '210';
-=======
 exports.compiler = (function () {
   exports.langID = '0';
->>>>>>> f749b047b33a119044c06ba9da2ec2e793ce3f37
   exports.version = "v1.0.0";
   exports.compile = function compile(code, data, config, resume) {
     // Compiler takes an AST in the form of a node pool and transforms it into
@@ -444,5 +439,5 @@ exports.compiler = (function () {
         score: 0
       });
     }
-  }
+  };
 })();
