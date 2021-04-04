@@ -1,9 +1,7 @@
-const bodyParser = require('body-parser');
-const {expect} = require('chai');
 const express = require('express');
 const request = require('supertest');
 
-const routes = require('./../../routes');
+const routes = require('.');
 
 describe('routes', () => {
   describe('auth', () => {
@@ -22,13 +20,13 @@ describe('routes', () => {
       }
 
       app = express();
-      app.use(bodyParser.json({type: "application/json", limit: '50mb' }));
+      app.use(express.json({type: "application/json", limit: '50mb' }));
       app.get('/auth', routes.auth(authProxy, 'foo'), (_, res) => res.sendStatus(200));
     });
 
     it('should pass token to auth', (done) => {
       auth = function(token, scope, resume) {
-        expect(token).to.equal('fake-token');
+        expect(token).toBe('fake-token');
         resume(null, {access: 'foo'});
       };
       request(app)

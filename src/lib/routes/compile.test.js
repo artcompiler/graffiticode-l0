@@ -1,9 +1,7 @@
-const bodyParser = require('body-parser');
-const {expect} = require('chai');
 const express = require('express');
 const request = require('supertest');
 
-const routes = require('./../../routes');
+const routes = require('.');
 
 describe('routes', () => {
   describe('compile', () => {
@@ -19,7 +17,7 @@ describe('routes', () => {
       };
 
       app = express();
-      app.use(bodyParser.json({type: "application/json", limit: '50mb' }));
+      app.use(express.json({type: "application/json", limit: '50mb' }));
       app.post('/compile', routes.compile(compiler));
     });
 
@@ -33,7 +31,7 @@ describe('routes', () => {
           if (err) {
             return done(err);
           }
-          expect(called).to.equal(1);
+          expect(called).toBe(1);
           done();
         });
     });

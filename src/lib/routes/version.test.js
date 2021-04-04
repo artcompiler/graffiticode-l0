@@ -1,7 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 
-const routes = require('./../../routes');
+const routes = require('.');
 
 describe('routes', () => {
   describe('version', () => {

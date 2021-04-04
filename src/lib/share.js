@@ -77,8 +77,8 @@
 
 */
 
-import Hashids from "hashids";
-import https from "https";
+const Hashids = require('hashids');
+const https = require('https');
 
 const messages = {};
 const reservedCodes = [];
@@ -240,7 +240,7 @@ function validate(token, resume) {
   }
 }
 
-export {
+module.exports = {
   assert,
   message,
   messages,
@@ -248,4 +248,4 @@ export {
   decodeID,
   encodeID,
   validate,
-}
+};

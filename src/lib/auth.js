@@ -3,7 +3,6 @@ const request = require('request');
 const url = require('url');
 
 const agent = new https.Agent({keepAlive: true});
-const validated = new Map();
 
 function postAuth(path, data, resume) {
   const uri = new url.URL('https://auth.artcompiler.com');

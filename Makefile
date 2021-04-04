@@ -1,23 +1,20 @@
 
 
-default: build start
+default: start
 
 build:
 	npm run build
 
-start: build
+start:
 	npm start
 
-watch: build
+watch:
 	npm run watch
 
-smoke: build
-	npm run smoke
-
 test:
-	npm run test
+	npm test
 
 clean:
-	rm -rf lib pub node_modules
+	rm -rf node_modules dist
 
 .PHONY: build test

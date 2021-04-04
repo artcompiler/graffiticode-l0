@@ -1,8 +1,7 @@
-const { expect } = require('chai');
 const NodeHttpAdapter = require('@pollyjs/adapter-node-http');
-const { Polly, setupMocha } = require('@pollyjs/core');
+const { Polly } = require('@pollyjs/core');
 const FSPersister = require('@pollyjs/persister-fs');
-const { createAuth } = require('./../lib/auth.js');
+const { createAuth } = require('./auth');
 
 Polly.register(FSPersister);
 Polly.register(NodeHttpAdapter);
@@ -13,10 +12,6 @@ describe('auth', () => {
     adapters: ['node-http'],
     persister: 'fs',
   });
-  // setupMocha({
-  //   adapters: ['node-http'],
-  //   persister: 'fs',
-  // });
 
   it('should validate with no token', function(done) {
     // Arrange
@@ -29,8 +24,8 @@ describe('auth', () => {
       }
 
       // Assert
-      expect(data.address).to.equal('guest');
-      expect(data.access).to.equal('foo');
+      expect(data.address).toBe('guest');
+      expect(data.access).toBe('foo');
       done();
     });
   });
@@ -49,7 +44,7 @@ describe('auth', () => {
       }
 
       // Assert
-      expect(err.message).to.equal('Unauthorized');
+      expect(err.message).toBe('Unauthorized');
       done();
     });
   });
@@ -71,8 +66,8 @@ describe('auth', () => {
       }
 
       // Assert
-      expect(data.address).to.equal('1.2.3.4');
-      expect(data.access).to.equal('foo');
+      expect(data.address).toBe('1.2.3.4');
+      expect(data.access).toBe('foo');
       done();
     });
   });
@@ -95,8 +90,8 @@ describe('auth', () => {
       }
 
       // Assert
-      expect(data.address).to.equal('1.2.3.4');
-      expect(data.access).to.equal('foo');
+      expect(data.address).toBe('1.2.3.4');
+      expect(data.access).toBe('foo');
 
       auth('fake-token', 'foo', (err, data) => {
         if (err) {
@@ -104,8 +99,8 @@ describe('auth', () => {
         }
 
         // Assert
-        expect(data.address).to.equal('1.2.3.4');
-        expect(data.access).to.equal('foo');
+        expect(data.address).toBe('1.2.3.4');
+        expect(data.access).toBe('foo');
         done();
       });
     });

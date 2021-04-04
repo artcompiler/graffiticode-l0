@@ -1,9 +1,9 @@
-import './viewer-setup';
+import '../../test/viewer-setup';
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import '../src/pub/viewer';
+import './viewer';
 
 let Viewer = window.gcexports.viewer.Viewer;
 let data = 123;
