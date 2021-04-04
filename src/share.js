@@ -77,13 +77,13 @@
 
 */
 
-const Hashids = require('hashids');
-const https = require('https');
+import Hashids from 'hashids';
+import https from 'https';
 
-const messages = {};
+export const messages = {};
 const reservedCodes = [];
-let ASSERT = true;
-let assert = (function () {
+const ASSERT = true;
+export const assert = (function () {
   return !ASSERT ?
     function () { } :
     function (val, str) {
@@ -97,7 +97,7 @@ let assert = (function () {
     }
 })();
 
-let message = function (errorCode, args = []) {
+export const message = function (errorCode, args = []) {
   let str = messages[errorCode];
   if (args) {
     args.forEach(function (arg, i) {
@@ -107,7 +107,7 @@ let message = function (errorCode, args = []) {
   return errorCode + ": " + str;
 };
 
-let reserveCodeRange = function (first, last, moduleName) {
+export const reserveCodeRange = function (first, last, moduleName) {
   assert(first <= last, "Invalid code range");
   let noConflict = reservedCodes.every(function (range) {
     return last < range.first || first > range.last;
@@ -117,7 +117,7 @@ let reserveCodeRange = function (first, last, moduleName) {
 }
 
 const hashids = new Hashids("Art Compiler LLC");  // This string shall never change!
-const decodeID = (id) => {
+export const decodeID = (id) => {
   // console.log("[1] decodeID() >> " + id);
   // 123456, 123+534653+0, Px4xO423c, 123+123456+0+Px4xO423c, Px4xO423c+Px4xO423c
   if (id === undefined) {
@@ -162,7 +162,7 @@ const decodeID = (id) => {
   return ids;
 };
 
-const encodeID = (ids) => {
+export const encodeID = (ids) => {
   // console.log("[1] encodeID() >> " + JSON.stringify(ids));
   let length = ids.length;
   if (length >= 3 &&
@@ -221,7 +221,7 @@ function postAuth(path, data, resume) {
   });
 }
 const validated = {};
-function validate(token, resume) {
+export function validate(token, resume) {
   if (token === undefined) {
     resume(null, {
       address: "guest",
@@ -239,13 +239,3 @@ function validate(token, resume) {
     });
   }
 }
-
-module.exports = {
-  assert,
-  message,
-  messages,
-  reserveCodeRange,
-  decodeID,
-  encodeID,
-  validate,
-};

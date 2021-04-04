@@ -1,11 +1,10 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
-
 module.exports = () => {
   return {
     entry: {
-      lexicon: './src/pub/lexicon.js',
-      viewer: './src/pub/viewer.js',
+      lexicon: './src/lexicon.js',
+      viewer: './src/viewer.jsx',
     },
     output: {
       filename: '[name].js',
@@ -24,6 +23,10 @@ module.exports = () => {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader'],
         },
+        {
+          test: /\.json$/,
+          loader: 'json-loader'
+        }
       ]
     },
     plugins: [

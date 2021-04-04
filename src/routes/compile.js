@@ -1,4 +1,4 @@
-module.exports = (compiler) => {
+export default (compiler) => {
   return (req, res) => {
     let body = req.body;
     let code = body.code || body.src;

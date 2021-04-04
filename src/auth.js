@@ -1,6 +1,6 @@
-const https = require('https');
-const request = require('request');
-const url = require('url');
+import https from 'https';
+import request from 'request';
+import url from 'url';
 
 const agent = new https.Agent({keepAlive: true});
 
@@ -39,7 +39,7 @@ function count(compiler, token, count) {
   });
 }
 
-exports.createAuth = function createAuth(compiler) {
+export const createAuth = function createAuth(compiler) {
   const validatedCache = new Map();
   return function (token, scope, resume) {
     if (!token) {

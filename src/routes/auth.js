@@ -1,4 +1,4 @@
-module.exports = (auth, scope) => {
+export default (auth, scope) => {
   return (req, res, next) => {
     let body = req.body;
     let token = body.auth;

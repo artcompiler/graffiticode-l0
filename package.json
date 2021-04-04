@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/graffiticode/L0"
   },
+  "type": "module",
   "dependencies": {
     "@google-cloud/opentelemetry-cloud-trace-exporter": "^0.7.0",
     "@opentelemetry/api": "^0.13.0",
@@ -48,9 +49,11 @@
     "d3": "^4.13.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
+    "fs": "*",
     "jest": "^24.9.0",
     "jsdom": "^15.2.1",
     "json-diff": "^0.5.4",
+    "json-loader": "^0.5.7",
     "nodemon": "^1.19.4",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
