@@ -417,7 +417,7 @@ let render = (function() {
   return render;
 })();
 export let compiler = (function () {
-  exports.langID = '0';
+  exports.langID = '210';
   exports.version = "v1.0.0";
   exports.compile = function compile(code, data, config, resume) {
     // Compiler takes an AST in the form of a node pool and transforms it into
