@@ -1,10 +1,24 @@
 /* Copyright (c) 2021, ARTCOMPILER INC */
 import {assert, message, messages, reserveCodeRange} from "./share.js";
-reserveCodeRange(1000, 1999, "compile");
-messages[1001] = "Node ID %1 not found in pool.";
-messages[1002] = "Invalid tag in node with Node ID %1.";
-messages[1003] = "No async callback provided.";
-messages[1004] = "No visitor method defined for '%1'.";
+import {BasisChecker} from './basis-compile.js';
+
+class Checker extends BasisChecker {
+  NUM(node, options, resume) {
+    console.log("Checker.NUM node=" + JSON.stringify(node, null, 2));
+    const err = [];
+    const val = node;
+    resume(err, val);
+  }
+}  
+
+class Transformer {
+  transform() {
+  }
+}
+class TransformerL0 extends Transformer {
+  transform() {
+  }
+}
 const transform = (function() {
   const table = {
     // v1
@@ -51,6 +65,7 @@ const transform = (function() {
       nid: nid,
     };
   }
+
   function visit(nid, options, resume) {
     assert(typeof resume === "function", message(1003));
     // Get the node from the pool of nodes.
@@ -393,15 +408,6 @@ const transform = (function() {
   return transform;
 })();
 let render = (function() {
-  function escapeXML(str) {
-    return String(str)
-      .replace(/&(?!\w+;)/g, "&amp;")
-      .replace(/\n/g, " ")
-      .replace(/\\/g, "\\\\")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
   function render(val, options, resume) {
     // Do some rendering here.
     resume([], val);
@@ -422,21 +428,24 @@ export const compiler = (function () {
           config: config,
           result: '',
         };
-        transform(code, options, function (err, val) {
-          if (err && err.length) {
-            resume(err, val);
-          } else {
-            render(val, options, function (err, val) {
-              val = !(val instanceof Array) && [val] || val;
+        const checker = new Checker(code);
+        checker.check(code, options, (err, val) => {
+          transform(code, options, function (err, val) {
+            if (err && err.length) {
               resume(err, val);
-            });
-          }
+            } else {
+              render(val, options, function (err, val) {
+                val = !(val instanceof Array) && [val] || val;
+                resume(err, val);
+              });
+            }
+          });
         });
       } catch (x) {
         console.log("ERROR with code");
         console.log(x.stack);
         resume([{
-        statusCode: 500,
+          statusCode: 500,
           error: "Compiler error"
         }]);
       }
