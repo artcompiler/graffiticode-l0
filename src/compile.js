@@ -1,7 +1,7 @@
 /* Copyright (c) 2021, ARTCOMPILER INC */
 import {assert, message, messages, reserveCodeRange} from "./share.js";
-import {BasisCompiler} from '@graffiticode/basis';
-//import {BasisCompiler} from '../../../../work/graffiticode/basis/index.js';
+import {Compiler as BasisCompiler} from '@graffiticode/basis/compiler.js';
+//import {Compiler as BasisCompiler} from '../../../../work/graffiticode/basis/src/compiler.js';
 export const compiler = new BasisCompiler({
   langID: 0,
   version: 'v0.0.0',

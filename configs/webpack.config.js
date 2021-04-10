@@ -15,9 +15,17 @@ module.exports = () => {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: {
-            loader: "babel-loader"
-          }
+          use: [{
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                ['@babel/preset-env', {
+                  "targets": "defaults"
+                }],
+                '@babel/preset-react'
+              ]
+            }
+          }],
         },
         {
           test: /\.css$/i,
@@ -32,5 +40,11 @@ module.exports = () => {
     plugins: [
       new CleanWebpackPlugin({ cleanStaleWebpackAssets: true }),
     ],
+    resolve: {
+      fallback: {
+        "https": require.resolve("https-browserify"),
+        "https": require.resolve("stream-http"),
+      }
+    }
   };
 };
