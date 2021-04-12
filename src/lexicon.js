@@ -1,4 +1,5 @@
 window.gcexports.globalLexicon = {
+  "query" : { "tk": 1, "name": "QUERY", "cls": "function", "length": 2 , "arity": 2 },
   "fetch" : { "tk": 1, "name": "FETCH", "cls": "function", "length": 1 , "arity": 1 },
   "val" : { "tk": 1, "name": "VAL", "cls": "function", "length": 2 , "arity": 2 },
   "key" : { "tk": 1, "name": "KEY", "cls": "function", "length": 2 , "arity": 2 },
