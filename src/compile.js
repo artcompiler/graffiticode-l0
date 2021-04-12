@@ -15,8 +15,8 @@ import {
   Checker as BasisChecker,
   Transformer as BasisTransformer,
   Compiler as BasisCompiler
-//} from '@graffiticode/basis';
-} from '../../../../work/graffiticode/basis/index.js';
+} from '@graffiticode/basis';
+//} from '../../../../work/graffiticode/basis/index.js';
 const getJSON = bent('json');
 
 export class Checker extends BasisChecker {
