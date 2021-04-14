@@ -275,5 +275,5 @@ function table(root) {
   return rows[0];
 }
 
-const groups = d3.group(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
+const groups = d3.groups(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
 console.log("groups=" + JSON.stringify([...groups.entries()]));
