@@ -44,6 +44,13 @@ export class Checker extends BasisChecker {
       resume(err, val);
     });
   }
+  SHAPE(node, options, resume) {
+    this.visit(node.elts[0], options, async (e0, v0) => {
+      const err = [];
+      const val = node;
+      resume(err, val);
+    });
+  }
 }
 
 export class Transformer extends BasisTransformer {
@@ -105,7 +112,7 @@ export class Transformer extends BasisTransformer {
     function typeFromArrayOfValues(name, vals) {
       // Create a subtype or union type from an array of values.
       const obj = {};
-      if (false && vals.length > 1) {        
+      if (false && vals.length > 1) {
         vals.forEach(val => {
           // For now, assume elements are objects.
           assert(typeof val === 'object' && val !== null && !(val instanceof Array));
@@ -147,6 +154,111 @@ export class Transformer extends BasisTransformer {
       });
     }
   }
+  SHAPE(node, options, resume) {
+    this.visit(node.elts[0], options, (e0, v0) => {
+      this.visit(node.elts[1], options, (e1, v1) => {
+        const paths = v0;
+        const root = v1;
+        const err = [].concat(e0).concat(e1);
+        const val = tree(table(root, []), paths);
+        resume(err, val);
+      });
+    });
+    function list(parentName, root) {
+      let rows = [];
+      root.forEach(node => {
+        let row = {};
+        if (node instanceof Array) {
+          node.forEach(child => {
+            rows = rows.concat(record(parentName, child));
+          });
+        } else if (typeof node === 'object' && node !== null) {
+          rows = rows.concat(record(parentName, node));
+        } else {
+          row[parentName] = node;
+          rows.push(row);
+        }
+      });
+      return rows;
+    }
+
+    function record(parentName, root) {
+      let records = [];
+      let row = {};
+      Object.keys(root).forEach(key => {
+        const name = `${parentName}/${key}`;
+        const node = root[key];
+        if (node instanceof Array) {
+          records = records.concat(list(name, node));
+        } else if (typeof node === 'object' && node !== null) {
+          records = records.concat(record(name, node));
+        } else {
+          row[name] = node;
+        }
+      });
+      const rows = [];
+      if (records.length > 0) {
+        records.forEach(record => {
+          rows.push(Object.assign({}, row, record));
+        });
+      } else {
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function table(root) {
+      const rows = [];
+      if (root instanceof Array) {
+        const row = list('', root);
+        rows.push(row);
+      } else {
+        const row = record('', root);
+        rows.push(row);
+      }
+      return rows[0];
+    }
+
+    function tree(rows, paths) {
+      const tree = {};
+      let hash;
+      const rootHash = {};
+      rows.forEach(row => {
+        let hash = rootHash;
+        paths.forEach(path => {
+          const value = row[path];
+          if (!hash[value]) {
+            hash[value] = {};
+          }
+          hash = hash[value];
+        });
+      });
+      console.log("tree() rootHash=" + JSON.stringify(rootHash, null, 2));
+      const root = getTree(rootHash);
+      console.log("tree() root=" + JSON.stringify(root, null, 2));
+      return root;
+    }
+
+    function getTree(obj) {
+      console.log("getTree() obj=" + JSON.stringify(obj));
+      const node = [];
+      Object.keys(obj).forEach(name => {
+        const children = getTree(obj[name]);
+        if (children.length > 0) {
+          node.push({
+            name: name,
+            children: children,
+          });
+        } else {
+          node.push({
+            name: name,
+            value: 1,
+          })
+        }
+      });
+      return node;
+    }
+  }
 }
 export const compiler = new BasisCompiler({
   langID: 137,
@@ -154,14 +266,6 @@ export const compiler = new BasisCompiler({
   Checker: Checker,
   Transformer: Transformer,
 });
-
-
-
-const path = [
-  'Brands/Boards.Type',
-  'Brands.Name',
-  'Brands/Boards.Name',
-];
 
 const root = {
   Brands: [{
@@ -214,66 +318,5 @@ const root = {
 
 const shape = ['Boards.Type', 'Boards.Name']
 
-function list(parentName, root) {
-  console.log("list() root=" + JSON.stringify(root, null, 2));
-  let rows = [];
-  root.forEach(node => {
-    let row = {};
-    if (node instanceof Array) {
-      node.forEach(child => {
-        rows = rows.concat(record(parentName, child));
-      });
-    } else if (typeof node === 'object' && node !== null) {
-      rows = rows.concat(record(parentName, node));
-    } else {
-      row[parentName] = node;
-      rows.push(row);
-    }
-  });
-  console.log("list() rows=" + JSON.stringify(rows, null, 2));
-  return rows;
-}
-
-function record(parentName, root) {
-  console.log("record() root=" + JSON.stringify(root, null, 2));
-  let records = [];
-  let row = {};
-  Object.keys(root).forEach(key => {
-    const name = `${parentName}/${key}`;
-    const node = root[key];
-    if (node instanceof Array) {
-      records = records.concat(list(name, node));
-    } else if (typeof node === 'object' && node !== null) {
-      records = records.concat(record(name, node));
-    } else {
-      row[name] = node;
-    }
-  });
-  const rows = [];
-  if (records.length > 0) {
-    records.forEach(record => {
-      console.log("record() record=" + JSON.stringify(record));
-      rows.push(Object.assign({}, row, record));
-    });
-  } else {
-    rows.push(row);
-  }
-  console.log("record() rows=" + JSON.stringify(rows, null, 2));
-  return rows;
-}
-
-function table(root) {
-  const rows = [];
-  if (root instanceof Array) {
-    const row = list('', root);
-    rows.push(row);
-  } else {
-    const row = record('', root);
-    rows.push(row);
-  }
-  console.log("table() rows=" + JSON.stringify(rows, null, 2));
-  return rows[0];
-}
-
-const groups = d3.groups(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
-console.log("groups=" + JSON.stringify([...groups.entries()]));
+//const groups = d3.groups(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
+//console.log("groups=" + JSON.stringify(groups, null, 2));
