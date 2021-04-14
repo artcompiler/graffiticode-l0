@@ -1,5 +1,6 @@
 /* Copyright (c) 2021, ARTCOMPILER INC */
 import {assert, message, messages, reserveCodeRange} from "./share.js";
+import * as d3 from 'd3-array';
 import bent from 'bent';
 import {
   graphql,
@@ -153,3 +154,126 @@ export const compiler = new BasisCompiler({
   Checker: Checker,
   Transformer: Transformer,
 });
+
+
+
+const path = [
+  'Brands/Boards.Type',
+  'Brands.Name',
+  'Brands/Boards.Name',
+];
+
+const root = {
+  Brands: [{
+    Name: "FooBrand",
+    Boards: [{
+      Name: "AA",
+      Spec: {
+        Type: "X",
+        Size: 10,
+      },
+    }, {
+      Name: "AB",
+      Spec: {
+        Type: "X",
+        Size: 20,
+      },
+    }, {
+      Name: "AC",
+      Spec: {
+        Type: "Y",
+        Size: 30,
+      },
+    }]
+  }, {
+    Name: "BarBrand",
+    Boards: [{
+      Name: "BA",
+      Spec: {
+        Type: "X",
+        Size: 10,
+      },
+    }, {
+      Name: "BB",
+      Spec: {
+        Type: "X",
+        Size: 20,
+      },
+    }]
+  }, {
+    Name: "BazBrand",
+    Boards: [{
+      Name: "CA",
+      Spec: {
+        Type: "X",
+        Size: 10,
+      },
+    }]
+  }],
+};
+
+const shape = ['Boards.Type', 'Boards.Name']
+
+function list(parentName, root) {
+  console.log("list() root=" + JSON.stringify(root, null, 2));
+  let rows = [];
+  root.forEach(node => {
+    let row = {};
+    if (node instanceof Array) {
+      node.forEach(child => {
+        rows = rows.concat(record(parentName, child));
+      });
+    } else if (typeof node === 'object' && node !== null) {
+      rows = rows.concat(record(parentName, node));
+    } else {
+      row[parentName] = node;
+      rows.push(row);
+    }
+  });
+  console.log("list() rows=" + JSON.stringify(rows, null, 2));
+  return rows;
+}
+
+function record(parentName, root) {
+  console.log("record() root=" + JSON.stringify(root, null, 2));
+  let records = [];
+  let row = {};
+  Object.keys(root).forEach(key => {
+    const name = `${parentName}/${key}`;
+    const node = root[key];
+    if (node instanceof Array) {
+      records = records.concat(list(name, node));
+    } else if (typeof node === 'object' && node !== null) {
+      records = records.concat(record(name, node));
+    } else {
+      row[name] = node;
+    }
+  });
+  const rows = [];
+  if (records.length > 0) {
+    records.forEach(record => {
+      console.log("record() record=" + JSON.stringify(record));
+      rows.push(Object.assign({}, row, record));
+    });
+  } else {
+    rows.push(row);
+  }
+  console.log("record() rows=" + JSON.stringify(rows, null, 2));
+  return rows;
+}
+
+function table(root) {
+  const rows = [];
+  if (root instanceof Array) {
+    const row = list('', root);
+    rows.push(row);
+  } else {
+    const row = record('', root);
+    rows.push(row);
+  }
+  console.log("table() rows=" + JSON.stringify(rows, null, 2));
+  return rows[0];
+}
+
+const groups = d3.group(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
+console.log("groups=" + JSON.stringify([...groups.entries()]));
