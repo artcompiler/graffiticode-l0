@@ -1,6 +1,5 @@
 /* Copyright (c) 2021, ARTCOMPILER INC */
 import {assert, message, messages, reserveCodeRange} from "./share.js";
-import * as d3 from 'd3-array';
 import bent from 'bent';
 import {
   graphql,
@@ -317,6 +316,3 @@ const root = {
 };
 
 const shape = ['Boards.Type', 'Boards.Name']
-
-//const groups = d3.groups(table(root, []), d => d['/Brands/Boards/Spec/Type'], d => d['/Brands/Name'], d => d['/Brands/Boards/Name']);;
-//console.log("groups=" + JSON.stringify(groups, null, 2));
