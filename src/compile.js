@@ -78,7 +78,6 @@ export class Transformer extends BasisTransformer {
         const root = v1;
         const schema = schemaFromObject(root);
         graphql(schema, query, root).then((val) => {
-          console.log("QUERY() val=" + JSON.stringify(val, null, 2));
           if (val.errors) {
             resume([], val);
           } else {
@@ -232,14 +231,11 @@ export class Transformer extends BasisTransformer {
           hash = hash[value];
         });
       });
-      console.log("tree() rootHash=" + JSON.stringify(rootHash, null, 2));
       const root = getTree(rootHash);
-      console.log("tree() root=" + JSON.stringify(root, null, 2));
       return root;
     }
 
     function getTree(obj) {
-      console.log("getTree() obj=" + JSON.stringify(obj));
       const node = [];
       Object.keys(obj).forEach(name => {
         const children = getTree(obj[name]);
@@ -265,54 +261,3 @@ export const compiler = new BasisCompiler({
   Checker: Checker,
   Transformer: Transformer,
 });
-
-const root = {
-  Brands: [{
-    Name: "FooBrand",
-    Boards: [{
-      Name: "AA",
-      Spec: {
-        Type: "X",
-        Size: 10,
-      },
-    }, {
-      Name: "AB",
-      Spec: {
-        Type: "X",
-        Size: 20,
-      },
-    }, {
-      Name: "AC",
-      Spec: {
-        Type: "Y",
-        Size: 30,
-      },
-    }]
-  }, {
-    Name: "BarBrand",
-    Boards: [{
-      Name: "BA",
-      Spec: {
-        Type: "X",
-        Size: 10,
-      },
-    }, {
-      Name: "BB",
-      Spec: {
-        Type: "X",
-        Size: 20,
-      },
-    }]
-  }, {
-    Name: "BazBrand",
-    Boards: [{
-      Name: "CA",
-      Spec: {
-        Type: "X",
-        Size: 10,
-      },
-    }]
-  }],
-};
-
-const shape = ['Boards.Type', 'Boards.Name']
