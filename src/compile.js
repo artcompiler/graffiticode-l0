@@ -50,6 +50,13 @@ export class Checker extends BasisChecker {
       resume(err, val);
     });
   }
+  ENCODE(node, options, resume) {
+    this.visit(node.elts[0], options, async (e0, v0) => {
+      const err = [];
+      const val = node;
+      resume(err, val);
+    });
+  }
 }
 
 export class Transformer extends BasisTransformer {
@@ -230,13 +237,12 @@ export class Transformer extends BasisTransformer {
       }
       return rows[0];
     }
-
     function tree(rows, paths) {
       const tree = {};
       let hash;
-      const rootHash = {};
+      let root = {};
       rows.forEach(row => {
-        let hash = rootHash;
+        let hash = root;
         paths.forEach(path => {
           const value = row[path];
           if (!hash[value]) {
@@ -245,14 +251,23 @@ export class Transformer extends BasisTransformer {
           hash = hash[value];
         });
       });
-      const root = getTree(rootHash);
       return root;
     }
-
-    function getTree(obj) {
+  }
+  ENCODE(node, options, resume) {
+    this.visit(node.elts[0], options, (e0, v0) => {
+      this.visit(node.elts[1], options, (e1, v1) => {
+        const encoding = v0;
+        const root = v1;
+        const err = [].concat(e0).concat(e1);
+        const val = encoding === 'name-children' && encode(root) || root;
+        resume(err, val);
+      });
+    });
+    function encode(root) {
       const node = [];
-      Object.keys(obj).forEach(name => {
-        const children = getTree(obj[name]);
+      Object.keys(root).forEach(name => {
+        const children = encode(root[name]);
         if (children.length > 0) {
           node.push({
             name: name,
