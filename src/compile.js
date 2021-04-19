@@ -90,14 +90,15 @@ export class Transformer extends BasisTransformer {
       let type;
       if (typeof val === 'boolean') {
         type = GraphQLBoolean;
-      } else if (typeof val === 'string') {
+      } else if (typeof val === 'string' ||
+                 typeof val === 'number') {
         type = GraphQLString;
-      } else if (typeof val === 'number') {
-        if (Number.isInteger(val)) {
-          type = GraphQLInt;
-        } else {
-          type = GraphQLFloat;
-        }
+      // } else if (typeof val === 'number') {
+      //   if (Number.isInteger(val)) {
+      //     type = GraphQLInt;
+      //   } else {
+      //     type = GraphQLFloat;
+      //   }
       } else if (val instanceof Array && val.length > 0) {
         type = typeFromValue(name, val[0]);
         assert(type);
@@ -163,27 +164,34 @@ export class Transformer extends BasisTransformer {
       });
     });
     function list(parentName, root) {
-      let rows = [];
-      root.forEach(node => {
-        let row = {};
-        if (node instanceof Array) {
-          node.forEach(child => {
-            rows = rows.concat(record(parentName, child));
-          });
-        } else if (typeof node === 'object' && node !== null) {
-          rows = rows.concat(record(parentName, node));
-        } else {
-          row[parentName] = node;
-          rows.push(row);
-        }
-      });
-      return rows;
-    }
-
-    function record(parentName, root) {
       let records = [];
       let row = {};
+      root.forEach(node => {
+        if (node instanceof Array) {
+          node.forEach(child => {
+            records = records.concat(record(parentName, child));
+          });
+        } else if (typeof node === 'object' && node !== null) {
+          records = records.concat(record(parentName, node));
+        } else {
+          row[parentName] = node;
+          records.push(row);
+        }
+      });
+      const rows = [];
+      if (records.length > 0) {
+        records.forEach(record => {
+          rows.push(record);
+        });
+      } else {
+        rows.push(row);
+      }
+      return rows;
+    }
+    function record(parentName, root) {
+      let rows = [];
       Object.keys(root).forEach(key => {
+        let records = [];
         const name = `${parentName}/${key}`;
         const node = root[key];
         if (node instanceof Array) {
@@ -191,20 +199,26 @@ export class Transformer extends BasisTransformer {
         } else if (typeof node === 'object' && node !== null) {
           records = records.concat(record(name, node));
         } else {
-          row[name] = node;
+          records.push({
+            [name]: node
+          });
+        }
+        if (rows.length > 0) {
+          let newRows = [];
+          rows.forEach(row => {
+            records.forEach(record => {
+              newRows.push(Object.assign({}, row, record));
+            });
+          });
+          rows = newRows;
+        } else {
+          records.forEach(record => {
+            rows.push(record);
+          });
         }
       });
-      const rows = [];
-      if (records.length > 0) {
-        records.forEach(record => {
-          rows.push(Object.assign({}, row, record));
-        });
-      } else {
-        rows.push(row);
-      }
       return rows;
     }
-
     function table(root) {
       const rows = [];
       if (root instanceof Array) {
