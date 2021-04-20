@@ -172,7 +172,6 @@ export class Transformer extends BasisTransformer {
     });
     function list(parentName, root) {
       let records = [];
-      let row = {};
       root.forEach(node => {
         if (node instanceof Array) {
           node.forEach(child => {
@@ -181,19 +180,12 @@ export class Transformer extends BasisTransformer {
         } else if (typeof node === 'object' && node !== null) {
           records = records.concat(record(parentName, node));
         } else {
-          row[parentName] = node;
-          records.push(row);
+          records.push({
+            [parentName]: node
+          });
         }
       });
-      const rows = [];
-      if (records.length > 0) {
-        records.forEach(record => {
-          rows.push(record);
-        });
-      } else {
-        rows.push(row);
-      }
-      return rows;
+      return records;
     }
     function record(parentName, root) {
       let rows = [];
