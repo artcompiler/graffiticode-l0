@@ -1,4 +1,12 @@
+# Node.js
 node_modules/
+
+# Lambda
+function.zip
+
+# Build
 dist/
+
+# Misc
 *~
 .DS_Store
