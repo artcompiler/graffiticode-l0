@@ -2,6 +2,5 @@
   "test": {
     "app_dev": "http://localhost:3000",
     "app_prod": "https://www.graffiticode.com"
-  },
-  "unused": true
+  }
 }

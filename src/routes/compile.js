@@ -4,7 +4,6 @@ export default (compiler) => {
     let code = body.code || body.src;
     let data = body.data;
     let config = body.config || {};
-
     if (!code || !data) {
       return res.sendStatus(400);
     }

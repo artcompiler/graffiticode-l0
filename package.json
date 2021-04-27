@@ -1,16 +1,21 @@
 {
+<<<<<<< HEAD
   "name": "@graffiticode/l137",
+=======
+  "name": "@graffiticode/graffiticode-L0",
+>>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
   "version": "0.0.1",
   "description": "Compiler as a service.",
-  "author": "Art Compiler LLC",
+  "author": "ARTCOMPILER",
   "license": "MIT",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graffiticode/L0"
+    "url": "https://github.com/graffiticode/graffiticode-L0"
   },
   "type": "module",
   "dependencies": {
+<<<<<<< HEAD
     "@google-cloud/opentelemetry-cloud-trace-exporter": "^0.7.0",
     "@graffiticode/basis": "^1.0.11",
     "@opentelemetry/api": "^0.13.0",
@@ -24,18 +29,38 @@
     "@opentelemetry/tracing": "^0.13.0",
     "@types/react": "^16.14.5",
     "@types/react-dom": "^16.9.12",
+=======
+    "@google-cloud/opentelemetry-cloud-trace-exporter": "^0.9.0",
+    "@graffiticode/basis": "^1.0.11",
+    "@opentelemetry/api": "^0.18.1",
+    "@opentelemetry/core": "^0.18.2",
+    "@opentelemetry/metrics": "^0.18.2",
+    "@opentelemetry/node": "^0.18.2",
+    "@opentelemetry/plugin-dns": "^0.15.0",
+    "@opentelemetry/plugin-express": "^0.15.0",
+    "@opentelemetry/plugin-http": "^0.18.2",
+    "@opentelemetry/plugin-https": "^0.13.0",
+    "@opentelemetry/tracing": "^0.18.2",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+>>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
     "aws-serverless-express": "^3.3.6",
     "bent": "^7.3.12",
     "body-parser": "^1.19.0",
+    "d3": "^6.7.0",
     "domready": "^1.0.8",
     "express": "^4.17.1",
+<<<<<<< HEAD
     "graphql": "^15.5.0",
     "hashids": "1.1.1",
+=======
+    "hashids": "^2.2.8",
+>>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
     "morgan": "^1.10.0",
-    "request": "^2.88.2",
-    "typescript": "^3.9.7"
+    "request": "^2.88.2"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/core": "^7.13.14",
     "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/plugin-transform-runtime": "^7.13.10",
@@ -78,5 +103,36 @@
     "lambda:update": "aws lambda update-function-code --function-name L0 --zip-file fileb://function.zip",
     "deploy:lambda": "npm run build && npm run lambda:zip && npm run lambda:update",
     "deploy:gcloud": "gcloud functions deploy L0 --trigger-http --runtime=nodejs10 --entry-point=compiler"
+=======
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-react": "^7.13.13",
+    "@pollyjs/adapter-node-http": "^5.1.0",
+    "@pollyjs/core": "^5.1.0",
+    "@pollyjs/persister-fs": "^5.0.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "babel-loader": "^8.2.2",
+    "chai": "^4.3.4",
+    "clean-webpack-plugin": "*",
+    "css-loader": "^5.2.4",
+    "enzyme": "^3.11.0",
+    "https-browserify": "^1.0.0",
+    "jest": "^26.6.3",
+    "json-loader": "^0.5.7",
+    "react": "^17.0.2",
+    "sinon": "^10.0.0",
+    "stream-http": "^3.2.0",
+    "style-loader": "^2.0.0",
+    "supertest": "^6.1.3",
+    "webpack": "^5.24.1",
+    "webpack-cli": "^4.5.0"
+  },
+  "scripts": {
+    "build": "npx webpack --config config/webpack.config.js --mode production; cp src/style.css dist",
+    "build:dev": "npx webpack --config config/webpack.config.js --mode development; cp src/style.css dist",
+    "start": "node app.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --config config/jest.config.js",
+    "watch": "nodemon -w src -w app.js -w package.json --exec make"
+>>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
   }
 }
