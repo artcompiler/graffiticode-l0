@@ -6,7 +6,6 @@ import {
   Compiler as BasisCompiler
 } from '@graffiticode/basis';
 //} from '../../../../work/graffiticode/basis/index.js';
-
 export class Checker extends BasisChecker {
   HELLO(node, options, resume) {
     this.visit(node.elts[0], options, async (e0, v0) => {
@@ -16,7 +15,6 @@ export class Checker extends BasisChecker {
     });
   }
 }
-
 export class Transformer extends BasisTransformer {
   HELLO(node, options, resume) {
     this.visit(node.elts[0], options, async (e0, v0) => {
@@ -26,7 +24,6 @@ export class Transformer extends BasisTransformer {
     });
   }
 }
-
 export const compiler = new BasisCompiler({
   langID: 0,
   version: 'v0.0.0',
