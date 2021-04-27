@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
-
-default: build start
-=======
 default: build-dev start
->>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
 
 build:
 	npm run build

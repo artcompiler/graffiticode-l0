@@ -7,13 +7,7 @@ import fs from 'fs';
 global.config = fs.readFileSync('./config.json');
 const PORT = process.env.PORT || `5${compiler.langID}`;
 const auth = createAuth(compiler);
-<<<<<<< HEAD
-const app = express();
-=======
-
 export const app = express();
-
->>>>>>> 5c920be96a975e4c2ac8a2dd6391373b032ae2e7
 app.use(morgan('dev'));
 app.use(express.json({type: 'application/json', limit: '50mb'}));
 
