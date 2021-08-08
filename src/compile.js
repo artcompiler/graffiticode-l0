@@ -1,11 +1,9 @@
 /* Copyright (c) 2021, ARTCOMPILER INC */
-import {assert, message, messages, reserveCodeRange} from "./share.js";
 import {
   Checker as BasisChecker,
   Transformer as BasisTransformer,
   Compiler as BasisCompiler
 } from '@graffiticode/basis';
-//} from '../../../../work/graffiticode/basis/index.js';
 
 export class Checker extends BasisChecker {
   HELLO(node, options, resume) {
